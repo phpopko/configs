@@ -2,7 +2,7 @@ local options = {
   backup = false,
   clipboard = "unnamedplus",
   cmdheight = 2,
-  completeopt = { "menuone", "noselect" } ,
+  completeopt = { "menuone", "noselect" },
   conceallevel = 0,
   fileencoding = "utf-8",
   hlsearch = true,
@@ -34,50 +34,38 @@ local options = {
   wrap = false,
   scrolloff = 4,
   sidescrolloff = 4,
-  --guifont = "Cascadia_Mono:h10",
   guifont = "JetBrainsMono_Nerd_Font:h11",
 }
 
 for k, v in pairs(options) do
-    vim.opt[k] = v
+  vim.opt[k] = v
 end
 
--- Create an autocommand group for file-specific settings
+-- Filetype indentation
 vim.api.nvim_create_augroup("FileTypeSpecific", { clear = true })
 
--- Set shiftwidth and tabstop to 2 for HTML, CSS, JavaScript, and Lua files
 vim.api.nvim_create_autocmd("FileType", {
-    pattern = { "html", "css", "javascript", "lua" },
-    callback = function()
-        vim.opt_local.shiftwidth = 2
-        vim.opt_local.tabstop = 2
-    end,
-    group = "FileTypeSpecific",
+  pattern = { "html", "css", "javascript", "lua" },
+  callback = function()
+    vim.opt_local.shiftwidth = 2
+    vim.opt_local.tabstop = 2
+  end,
+  group = "FileTypeSpecific",
 })
 
+-- Formatting behavior
 vim.cmd("autocmd BufEnter * set formatoptions-=cro")
 vim.cmd("autocmd BufEnter * setlocal formatoptions-=cro")
 
-vim.opt.shortmess:append "c"
+vim.opt.shortmess:append("c")
 vim.opt.number = true
 vim.opt.relativenumber = true
 
-local is_windows = vim.loop.os_uname().sysname == "Windows_NT"
+-- Enable WSL
 
-if is_windows then
-  vim.opt.shell = "powershell"
-  vim.opt.shellcmdflag =
-    "-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command"
-  vim.opt.shellquote = ""
-  vim.opt.shellxquote = ""
-end
--- else: let Linux/WSL use its default shell (bash/zsh)
+vim.opt.shell = "wsl.exe"
+vim.opt.shellcmdflag = ""
+vim.opt.shellquote = ""
+vim.opt.shellxquote = ""
 
-
--- open a WSL terminal split when you want Linux
-vim.api.nvim_create_user_command("TermWSL", function()
-  vim.cmd("split | terminal wsl.exe")
-end, {})
-
-vim.keymap.set("n", "<leader>tw", ":TermWSL<CR>", { silent = true, desc = "WSL terminal" })
 
