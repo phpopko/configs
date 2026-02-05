@@ -103,5 +103,17 @@ vim.api.nvim_create_user_command("Term", function()
   vim.opt_local.relativenumber = false
 end, {})
 
--- Optional fast terminal keymap
-vim.keymap.set("n", "<leader>t", ":Term<CR>", { silent = true })
+-- split management
+keymap("n", "<leader>sv", ":vsplit<CR>", opts)
+keymap("n", "<leader>sh", ":split<CR>", opts)
+keymap("n", "<leader>sc", "<C-w>c", opts)
+keymap("n", "<leader>so", "<C-w>o", opts)
+
+-- buffer management
+keymap("n", "<leader>bd", ":bdelete<CR>", opts)
+keymap("n", "<leader>ba", ":%bd|e#<CR>", opts)
+
+keymap("n", "<leader>d", "yyp", opts)
+
+
+
