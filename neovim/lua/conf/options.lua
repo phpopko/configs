@@ -28,7 +28,7 @@ local options = {
   tabstop = 4,
   cursorline = false,
   number = true,
-  relativenumber = false,
+  relativenumber = true,
   numberwidth = 4,
   signcolumn = "yes",
   wrap = false,
@@ -36,14 +36,12 @@ local options = {
   sidescrolloff = 4,
   guifont = "JetBrainsMono_Nerd_Font:h11",
 }
-
 for k, v in pairs(options) do
   vim.opt[k] = v
 end
 
 -- Filetype indentation
 vim.api.nvim_create_augroup("FileTypeSpecific", { clear = true })
-
 vim.api.nvim_create_autocmd("FileType", {
   pattern = { "html", "css", "javascript", "lua" },
   callback = function()
@@ -54,18 +52,11 @@ vim.api.nvim_create_autocmd("FileType", {
 })
 
 -- Formatting behavior
-vim.cmd("autocmd BufEnter * set formatoptions-=cro")
-vim.cmd("autocmd BufEnter * setlocal formatoptions-=cro")
+vim.api.nvim_create_autocmd("BufEnter", {
+  pattern = "*",
+  callback = function()
+    vim.opt_local.formatoptions:remove({ "c", "r", "o" })
+  end,
+})
 
 vim.opt.shortmess:append("c")
-vim.opt.number = true
-vim.opt.relativenumber = true
-
--- Enable WSL
-
-vim.opt.shell = "wsl.exe"
-vim.opt.shellcmdflag = ""
-vim.opt.shellquote = ""
-vim.opt.shellxquote = ""
-
-
